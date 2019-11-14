@@ -19,7 +19,10 @@ library(here)
 ```{r}
 lobster_abundance <- read.csv("lobster_abundance_sbc_lter.csv",
                               na = -99999) %>% 
-  clean_names()
+  clean_names() %>% 
+  mutate(year = as.character(year))
+
+## lobster_abundance$site[lobster_abundance$site == "IVEE"] <- "Isla Vista"
 ```
 
 ### 1. Introduction
@@ -48,6 +51,8 @@ ggplot(lobster_count, aes(x = year, y = total_counts)) +
        title = "Total lobster counts per site each year (2012-2018)",
        subtitle = "Source: SBC LTER",
        caption = "Lobster abundance increased between 2012 and 2018  for most of the sites excluding AQUE site./nThe MPA sites (IVEE and NAPL) lobster abundance grew substantially over the recorded years compared to non-MPA sites")
+
+### Change color scheme, theme, etc...
 ```
 
 #### b. Results B
@@ -55,9 +60,25 @@ ggplot(lobster_count, aes(x = year, y = total_counts)) +
 ```{r}
 lobster_size <- lobster_abundance %>% 
   filter(year %in% c("2012", "2018")) %>% 
-  group_by(year, site) %>% 
-  summarize(mean_size = mean(size_mm, na.rm = TRUE))
+  uncount(count)
 
+ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
+  geom_jitter(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~site) +
+  labs(x = "Year",
+       y = "Lobster Size (mm)",
+       title = "Lobster size distribution for each site in 2012 and 2018",
+       subtitle = "Source: SBC LTER")
+  
+### make jitter points smaller and more transparent, change color of boxplots, adjust theme, make beautiful, etc...
+  
+```
 
+#### c. Results C
+
+```{r}
+lobster_compare <- lobster_size %>% 
+  mutate(site_category = ifelse(site == c("NAPL", "IVEE"), "MPA", "Non-MPA"))
 ```
 
