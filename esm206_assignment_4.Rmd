@@ -14,6 +14,9 @@ library(tidyverse)
 library(janitor)
 library(tidyr)
 library(here)
+library(effsize)
+library(kableExtra)
+library(DT)
 ```
 
 ```{r}
@@ -74,11 +77,11 @@ In general, the total lobster abundance at each of the 5 survey sites have incre
 ```{r}
 lobster_size <- lobster_abundance %>% 
   filter(year %in% c("2012", "2018")) %>% 
-  uncount(count)
+  uncount(count) %>% 
+  mutate(year = as.character(year))
 
 ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
-  geom_jitter(show.legend = FALSE) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_violin(show.legend = FALSE) +
   facet_wrap(~site) +
   theme_bw() +
   labs(x = "Year",
@@ -94,6 +97,28 @@ ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
 
 ```{r}
 lobster_compare <- lobster_size %>% 
-  mutate(site_category = if_else(site %in% c("NAPL", "IVEE"), "MPA", "Non-MPA"))
+  mutate(site_category = if_else(site %in% c("Naples", "Isla Vista"), "MPA", "Non-MPA")) %>% 
+  select(year, site, size_mm, site_category)
+
+lobster_summary <- lobster_compare %>% 
+  group_by(year, site_category) %>% 
+  summarize(
+    mean_size = mean(size_mm, na.rm = TRUE),
+    sd_size = sd(size_mm, na.rm = TRUE),
+    lobster_number = n()) 
+
+lobster_summary %>% 
+  kable(col.names = c("Year",
+                      "MPA or Non-MPA",
+                      "Mean Size (mm)",
+                      "Standard Deviation (mm)",
+                      "Count")) %>% 
+  kable_styling(bootstrap_options = "bordered",
+                full_width = TRUE,
+                position = "left")
+
+#### start performing two-sample t-tests for 2012 MPA vs. non-MPA, 2018 MPA vs. non-MPA, 2012 MPA vs 2018 MPA, 2012 non-MPA vs 2018 non-MPA
+
+
 ```
 
