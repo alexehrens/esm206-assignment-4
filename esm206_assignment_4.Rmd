@@ -16,7 +16,8 @@ library(tidyr)
 library(here)
 library(effsize)
 library(kableExtra)
-library(DT)
+library(directlabels)
+library(ggridges)
 ```
 
 ```{r}
@@ -78,14 +79,16 @@ In general, the total lobster abundance at each of the 5 survey sites have incre
 lobster_size <- lobster_abundance %>% 
   filter(year %in% c("2012", "2018")) %>% 
   uncount(count) %>% 
-  mutate(year = as.character(year))
+  mutate(Year = as.character(year))
 
-ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
-  geom_violin(show.legend = FALSE) +
+ggplot(lobster_size, aes(y = Year, x = size_mm, fill = Year, color = Year)) +
+  geom_density_ridges(color = "gray40") +
   facet_wrap(~site) +
   theme_bw() +
-  labs(x = "Year",
-       y = "Lobster Size (mm)",
+  scale_y_discrete(expand = c(0,0)) +
+  theme(legend.position = c(0.84, 0.25)) +
+  labs(y = "Year",
+       x = "Lobster Size (mm)",
        title = "Lobster size distribution for each site in 2012 and 2018",
        subtitle = "Source: SBC LTER")
   
@@ -108,7 +111,8 @@ lobster_summary <- lobster_compare %>%
     lobster_number = n()) 
 
 lobster_summary %>% 
-  kable(col.names = c("Year",
+  kable(digits = 2,
+        col.names = c("Year",
                       "MPA or Non-MPA",
                       "Mean Size (mm)",
                       "Standard Deviation (mm)",
@@ -118,7 +122,7 @@ lobster_summary %>%
                 position = "left")
 
 #### start performing two-sample t-tests for 2012 MPA vs. non-MPA, 2018 MPA vs. non-MPA, 2012 MPA vs 2018 MPA, 2012 non-MPA vs 2018 non-MPA
-
+lobster_diff <- t.test()
 
 ```
 
