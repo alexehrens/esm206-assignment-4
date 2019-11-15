@@ -20,9 +20,13 @@ library(here)
 lobster_abundance <- read.csv("lobster_abundance_sbc_lter.csv",
                               na = -99999) %>% 
   clean_names() %>% 
-  mutate(year = as.character(year))
+  mutate(site = as.character(site))
 
-## lobster_abundance$site[lobster_abundance$site == "IVEE"] <- "Isla Vista"
+lobster_abundance$site[lobster_abundance$site == "IVEE"] <- "Isla Vista"
+lobster_abundance$site[lobster_abundance$site == "NAPL"] <- "Naples"
+lobster_abundance$site[lobster_abundance$site == "AQUE"] <- "Arroyo Quemado"
+lobster_abundance$site[lobster_abundance$site == "CARP"] <- "Carpinteria"
+lobster_abundance$site[lobster_abundance$site == "MOHK"] <- "Mohawk"
 ```
 
 ### 1. Introduction
@@ -41,19 +45,29 @@ AQUE, CARP and MOHK - Non-MPA
 ```{r}
 lobster_count <- lobster_abundance %>% 
   group_by(year, site) %>% 
-  summarize(total_counts = sum(count))
-
+  summarize(total_counts = sum(count)) %>% 
+  mutate(category = ifelse(site %in% c("Isla Vista", "Naples"), "MPA", "Non-MPA")) %>% 
+  mutate(Site = site)
+  
 ggplot(lobster_count, aes(x = year, y = total_counts)) +
-  geom_col(aes(fill = site),show.legend = FALSE) +
-  facet_wrap(~site)+
+  geom_line(aes(color = Site)) +
+  theme_bw() +
+  theme(legend.position = c(0.23, 0.65),
+        legend.background = element_rect(fill = "transparent"),
+        legend.key.size = unit(5, "mm")) +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(limits = c(0, 1000),
+                     expand = c(0,0)) +
   labs(x = "Year (2012-2018)",
        y = "Total lobster counts",
-       title = "Total lobster counts per site each year (2012-2018)",
+       title = "Yearly lobster counts at each survey site (2012-2018)",
        subtitle = "Source: SBC LTER",
-       caption = "Lobster abundance increased between 2012 and 2018  for most of the sites excluding AQUE site./nThe MPA sites (IVEE and NAPL) lobster abundance grew substantially over the recorded years compared to non-MPA sites")
+       caption = "Lobster abundance increased between 2012 and 2018  for most of the sites excluding AQUE site. The MPA sites (IVEE and NAPL) lobster abundance grew substantially over the recorded years compared to non-MPA sites")
 
 ### Change color scheme, theme, etc...
 ```
+
+In general, the total lobster abundance at each of the 5 survey sites have increased from 2012 to 2018. However, the only two sites to show an increase in abundance over the final year of study (2017 to 2018) are Isla Vista and Naples, both of these sites are located in Marine Protected Areas. The three sites that are not in Marine Protected Areas show a decrease in total lobster abundance over the final year of the survey. It appears from the trends in Figure 1 that designated Marine Protected Areas help improve lobster abundance in those areas.
 
 #### b. Results B
 
@@ -66,6 +80,7 @@ ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
   geom_jitter(show.legend = FALSE) +
   geom_boxplot(show.legend = FALSE) +
   facet_wrap(~site) +
+  theme_bw() +
   labs(x = "Year",
        y = "Lobster Size (mm)",
        title = "Lobster size distribution for each site in 2012 and 2018",
@@ -79,6 +94,6 @@ ggplot(lobster_size, aes(x = year, y = size_mm, fill = year)) +
 
 ```{r}
 lobster_compare <- lobster_size %>% 
-  mutate(site_category = ifelse(site == c("NAPL", "IVEE"), "MPA", "Non-MPA"))
+  mutate(site_category = if_else(site %in% c("NAPL", "IVEE"), "MPA", "Non-MPA"))
 ```
 
