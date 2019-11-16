@@ -110,6 +110,7 @@ lobster_summary <- lobster_compare %>%
     sd_size = sd(size_mm, na.rm = TRUE),
     lobster_number = n()) 
 
+# summary table of lobster statistics 
 lobster_summary %>% 
   kable(digits = 2,
         col.names = c("Year",
@@ -122,7 +123,44 @@ lobster_summary %>%
                 position = "left")
 
 #### start performing two-sample t-tests for 2012 MPA vs. non-MPA, 2018 MPA vs. non-MPA, 2012 MPA vs 2018 MPA, 2012 non-MPA vs 2018 non-MPA
-lobster_diff <- t.test()
+# Lobster sizes for MPA vs. non-MPA sites in 2012
+
+# Create vectors 
+lobster2012mpa <- lobster_compare %>% 
+  filter(year == "2012") %>% 
+  filter(site_category == "MPA") %>% 
+  pull(size_mm)
+
+lobster2012nonmpa <- lobster_compare %>% 
+  filter(year == "2012") %>% 
+  filter(site_category == "Non-MPA") %>% 
+  pull(size_mm)
+
+lobster2018mpa <- lobster_compare %>% 
+  filter(year == "2018") %>% 
+  filter(site_category == "MPA") %>% 
+  pull(size_mm)
+
+lobster2018nonmpa <- lobster_compare %>% 
+  filter(year == "2018") %>% 
+  filter(site_category == "Non-MPA") %>% 
+  pull(size_mm)
+
+# t-test comparing mpa and non-mpa sites in 2012
+lobster2012_ttest <- t.test(lobster2012mpa, lobster2012nonmpa)
+lobster2012_ttest
+
+# t-test comparing mpa and non-mpa sites in 2018
+lobster2018_ttest <- t.test(lobster2018mpa, lobster2018nonmpa)
+lobster2018_ttest
+
+# t-test comparing mpa sites in 2012 and 2018
+lobster_mpa_ttest <- t.test(lobster2012mpa, lobster2018mpa)
+lobster_mpa_ttest
+
+# t-test comparing non-mpa sites in 2012 and 2018
+lobster_nonmpa_ttest <- t.test(lobster2012nonmpa, lobster2018nonmpa)
+lobster_nonmpa_ttest
 
 ```
 
