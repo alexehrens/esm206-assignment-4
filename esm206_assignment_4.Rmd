@@ -146,21 +146,56 @@ lobster2018nonmpa <- lobster_compare %>%
   filter(site_category == "Non-MPA") %>% 
   pull(size_mm)
 
-# t-test comparing mpa and non-mpa sites in 2012
+# t-test and cohen's d comparing mpa and non-mpa sites in 2012
 lobster2012_ttest <- t.test(lobster2012mpa, lobster2012nonmpa)
 lobster2012_ttest
+lobster2012_d <- cohen.d(lobster2012mpa, lobster2012nonmpa)
+lobster2012_d
 
-# t-test comparing mpa and non-mpa sites in 2018
+# t-test and cohen's d comparing mpa and non-mpa sites in 2018
 lobster2018_ttest <- t.test(lobster2018mpa, lobster2018nonmpa)
 lobster2018_ttest
+lobster2018_d <- cohen.d(lobster2018mpa, lobster2018nonmpa)
+lobster2018_d
 
 # t-test comparing mpa sites in 2012 and 2018
 lobster_mpa_ttest <- t.test(lobster2012mpa, lobster2018mpa)
 lobster_mpa_ttest
+lobster_mpa_d <- cohen.d(lobster2012mpa, lobster2018mpa)
+lobster_mpa_d
 
 # t-test comparing non-mpa sites in 2012 and 2018
 lobster_nonmpa_ttest <- t.test(lobster2012nonmpa, lobster2018nonmpa)
 lobster_nonmpa_ttest
+lobster_nonmpa_d <- cohen.d(lobster2012nonmpa, lobster2018nonmpa)
+lobster_nonmpa_d
 
 ```
 
+MPA vs. Non-MPA in 2012: 
+
+- Diff. in means = (74.92 - 67.38) = 7.54
+- Non-MPA > MPA
+- t = -3.2516, p-value = 0.002263
+- Cohen's d = -0.6098605 (medium)
+
+MPA vs. Non-MPA in 2018:
+
+- Diff. in means = (77.57 - 73.62) = 3.95
+- MPA > Non-MPA
+- t = 7.3071, p-value = 4.876e-13
+- Cohen's d = 0.3514986 (small)
+
+MPA in 2012 vs. MPA in 2018:
+
+- Diff. in means = (77.57 - 67.38) = 10.19. 
+- Increase in mean size from 2012 to 2018
+- t = -4.6879, p-value = 4.76e-05
+- Cohen's d = -0.8700026 (large)
+
+Non-MPA in 2012 vs. Non-MPA in 2018:
+
+- Diff. in means = (74.92 - 73.62) = 1.30
+- Small decrease in mean size from 2012 to 2018
+- t = 1.3343, p-value = 0.1831
+- Cohen's d = 0.1213778 (negligible)
