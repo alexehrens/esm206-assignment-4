@@ -35,18 +35,18 @@ lobster_abundance$site[lobster_abundance$site == "MOHK"] <- "Mohawk"
 
 ### 1. Introduction
 
-The California spiny lobster (Panulirus interruptus) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests. These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems. This report explores the relationship between the size and abundance distribution of the California spiny lobster at five locations along the Santa Barbara channel. Of the five sites, two are designated as marine protected areas (MPAs) by the California Department of Fish and Game, which restrict human activity — including fishing. Many MPAs have shown positive trends of recovery in habitats across the world. This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem.
+The California spiny lobster (*Panulirus interruptus*) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests (National Park Service, 2016). These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems (National Park Service, 2016). This report explores the relationship between the abundance and size distribution of the California spiny lobster at 5 locations along the Santa Barbara channel. On January 1st, 2012, two of the 5 sites were designated as marine protected areas (MPAs) by the California Department of Fish and Wildlife (SBC LTER, 2019). Human activity, including fishing, is restricted in MPAs, and as a result many have shown positive trends of habitat recovery (Santa Barbara Channelkeeper). This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem. 
 
 ### 2. Data and Methods
 
-The two variables being analyzed in this report are lobster size (mm) and lobster abundance at five sites along the Santa Barbara channel between years 2012-2018. Data on abundance and size were collected by annually by divers just before the start of the fishing season in late summer (SBC LTER, 2019). Welch’s two sample t-test was used to compare lobster size at MPA and non-MPA sites for 2012 and 2018. The following scenarios were compared:
+The two variables being analyzed in this report are lobster size (mm) and lobster abundance at five sites along the Santa Barbara channel between years 2012 and 2018. Data on abundance and size were collected annually by divers just before the start of the fishing season in late summer (SBC LTER, 2019). Lobster counts were compared at each site over the time period of 2012 to 2018. Welch’s two sample t-test and Cohen's d effect size test were used to compare lobster sizes at MPA and non-MPA sites for 2012 and 2018. The following scenarios were compared:
 
-- 2012 MPA vs.2012 Non-MPA
-- 2018 MPA vs. 2018 Non-MPA
-- 2012 MPA vs. 2018 MPA
-- 2012 Non-MPA vs. 2018 Non-MPA
+- 2012 MPA vs.2012 Non-MPA sites
+- 2018 MPA vs. 2018 Non-MPA sites
+- 2012 MPA vs. 2018 MPA sites
+- 2012 Non-MPA vs. 2018 Non-MPA sites
 
-A 95% significance level was used. Rstudio Version 1.2.1335 was used to analyze data and run these statistical tests.
+A 95% confidence level was used to determine significance. Rstudio Version 1.2.1335 was used to analyze data, creat graphs and tables, and run statistical tests.
 
 ### 3. Results
 
@@ -75,9 +75,7 @@ ggplot(lobster_count, aes(x = year, y = total_counts)) +
        y = "Total lobster counts",
        title = "Spiny lobster abundance in the Santa Barbara Channel (2012-2018)",
        subtitle = "Source: SBC LTER",
-       caption = "Figure 1. Counts of California spiny lobster at 5 sites in the Santa Barbara Channel between 2012 and 2018. Solid 
-lines indicate the sites that are in MPAs (Isla Vista and Naples), and dashed lines are sites that are not in MPAs 
-(Arroyo Quemado, Carpinteria, and Mohawk).")
+       caption = "Figure 1. Counts of California spiny lobster at 5 sites in the Santa Barbara Channel between 2012 and 2018. Solid \nlines indicate the sites that are in MPAs (Isla Vista and Naples), and dashed lines are sites that are not in MPAs \n(Arroyo Quemado, Carpinteria, and Mohawk).")
 
 ```
 
@@ -102,16 +100,13 @@ ggplot(lobster_size, aes(y = Year, x = size_mm, fill = Year, color = Year)) +
         plot.subtitle = element_text(size = 8)) +
   labs(y = "Year",
        x = "Lobster Size (mm)",
-       title = "Lobster size distribution at survey sites in 2012 and 2018",
+       title = "Spiny lobster size distribution in the Santa Barbara Channel in 2012 and 2018",
        subtitle = "Source: SBC LTER",
-       caption = "Figure 2. Size distributions of California spiny lobsters at 5 survey sites in the Santa Barbara Channel, collected in 
-2012 and 2018. Lobster sizes (in mm) were measured at Arroyo Quemado (n = 38 in 2012, n = 54 in 2018), 
-Carpinteria (n = 78 in 2012, n = 343 in 2018), Isla Vista (n = 26 in 2012, n = 946 in 2018), Mohawk (n = 83 in 2012, 
-n = 164 in 2018), and Naples (n = 6 in 2012, n = 298 in 2018). Isla Vista and Naples are in MPAs, the rest are not.")
+       caption = "Figure 2. Size distributions of California spiny lobsters at 5 survey sites in the Santa Barbara Channel, collected in \n2012 and 2018. Lobster sizes (in mm) were measured at Arroyo Quemado (n = 38 in 2012, n = 54 in 2018), \nCarpinteria (n = 78 in 2012, n = 343 in 2018), Isla Vista (n = 26 in 2012, n = 946 in 2018), Mohawk (n = 83 in 2012, \nn = 164 in 2018), and Naples (n = 6 in 2012, n = 298 in 2018). Isla Vista and Naples are in MPAs, the rest are not.")
   
 ```
 
-The density plots above show the distribution of lobster sizes (mm) at each site in 2012 and 2018. The two MPA sites, Isla Vista and Naples, show a positive shift in lobster size distribution in 2018 compared to 2012. However, the non-MPA sites, Arroyo Quemado, Mohawk and Carpinteria, show little to no shifts in lobster size distribution. Based on these graphs, the lobster populations are able to grow larger which may indicate they are healthier and living longer due to reduced fishing and a flourishing habitat.
+The density plots in Figure 2 show the distribution of lobster sizes (mm) at each site in 2012 and 2018. The two MPA sites, Isla Vista and Naples, show a positive shift in lobster size distribution in 2018 compared to 2012. However, the non-MPA sites, Arroyo Quemado, Mohawk and Carpinteria, show little to no shifts in lobster size distribution. Based on trends shown in Figure 2, lobster populations are able to grow larger at MPA sites which may indicate they are healthier and living longer due to reduced fishing and a flourishing habitat.
 
 #### c. Results C - Compare Mean Lobster Sizes
 
@@ -131,7 +126,7 @@ lobster_summary <- lobster_compare %>%
 ##### ADD CAPTION ABOVE TABLE
 lobster_summary %>% 
   kable(digits = 2,
-        caption = "Table 1. Comparing summary statistics of California spiny lobster size distributions at MPA vs. non-MPA sites in 2012 and 2018",
+        caption = "Table 1. Comparing summary statistics (mean, standard deviation, and number of counts) of California spiny lobster size distributions at MPA vs. non-MPA sites in 2012 and 2018",
         col.names = c("Year",
                       "MPA or Non-MPA",
                       "Mean Size (mm)",
@@ -245,8 +240,8 @@ Alternative hypothesis: There is a difference between mean lobster size of Non-M
 
 ### 4. References
 
-https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-sbc.77.3
+SBC LTER (2019). https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-sbc.77.3
 
-https://www.nps.gov/chis/learn/nature/california-spiny-lobster.htm
+National Park Service (2016). https://www.nps.gov/chis/learn/nature/california-spiny-lobster.htm
 
-https://www.sbck.org/current-issues/marine-conservation/marine-protected-areas/learn-about-mpas/
+Santa Barbara Channelkeeper (no date). https://www.sbck.org/current-issues/marine-conservation/marine-protected-areas/learn-about-mpas/
