@@ -1,5 +1,5 @@
 ---
-title: "ESM 206 Assignment 4 - Spiny Lobsters"
+title: "ESM 206 Assignment 4 - Spiny Lobsters in the Santa Barbara Channel"
 author: "Alex Ehrens & Courtney Krone"
 date: "11/11/2019"
 output: html_document
@@ -13,10 +13,8 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(janitor)
 library(tidyr)
-library(here)
 library(effsize)
 library(kableExtra)
-library(directlabels)
 library(ggridges)
 ```
 
@@ -35,18 +33,20 @@ lobster_abundance$site[lobster_abundance$site == "MOHK"] <- "Mohawk"
 
 ### 1. Introduction
 
-The California spiny lobster (*Panulirus interruptus*) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests (National Park Service, 2016). These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems (National Park Service, 2016). This report explores the relationship between the abundance and size distribution of the California spiny lobster at 5 locations along the Santa Barbara channel. On January 1st, 2012, two of the 5 sites were designated as marine protected areas (MPAs) by the California Department of Fish and Wildlife (SBC LTER, 2019). Human activity, including fishing, is restricted in MPAs, and as a result many have shown positive trends of habitat recovery (Santa Barbara Channelkeeper). This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem. 
+The California spiny lobster (*Panulirus interruptus*) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests (National Park Service, 2016). These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems (National Park Service, 2016). This report explores the relationship between the abundance and size distribution of the California spiny lobster at 5 locations along the Santa Barbara channel. On January 1st, 2012, two of the 5 sites were designated as marine protected areas (MPAs) by the California Department of Fish and Wildlife (SBC LTER, 2019). Human activity, including fishing, is restricted in MPAs, and as a result many have shown positive trends of habitat recovery (Santa Barbara Channelkeeper). This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem.
+
+![California Spiny Lobster. Long Point, Catalina, California. Photographer: Keoki Stender](spiny_lobster.png)
 
 ### 2. Data and Methods
 
-The two variables being analyzed in this report are lobster size (mm) and lobster abundance at five sites along the Santa Barbara channel between years 2012 and 2018. Data on abundance and size were collected annually by divers just before the start of the fishing season in late summer (SBC LTER, 2019). Lobster counts were compared at each site over the time period of 2012 to 2018. Welch’s two sample t-test and Cohen's d effect size test were used to compare lobster sizes at MPA and non-MPA sites for 2012 and 2018. The following scenarios were compared:
+The two variables being analyzed in this report are lobster size (mm) and lobster abundance at 5 sites along the Santa Barbara channel between years 2012 and 2018. Data on abundance and size were collected annually by divers just before the start of the fishing season in late summer (SBC LTER, 2019). Lobster counts were compared at each site over the time period of 2012 to 2018. Welch’s two sample t-test and Cohen's d effect size test were used to compare lobster sizes at MPA and non-MPA sites for 2012 and 2018. The following samples were compared:
 
-- 2012 MPA vs.2012 Non-MPA sites
+- 2012 MPA vs. 2012 Non-MPA sites
 - 2018 MPA vs. 2018 Non-MPA sites
 - 2012 MPA vs. 2018 MPA sites
 - 2012 Non-MPA vs. 2018 Non-MPA sites
 
-A 95% confidence level was used to determine significance. Rstudio Version 1.2.1335 was used to analyze data, creat graphs and tables, and run statistical tests.
+A 95% confidence level was used to determine significance. Rstudio Version 1.2.1335 was used to analyze data, create figures and tables, and run statistical tests.
 
 ### 3. Results
 
@@ -79,7 +79,7 @@ ggplot(lobster_count, aes(x = year, y = total_counts)) +
 
 ```
 
-In general, the total lobster abundance at each of the 5 survey sites have increased from 2012 to 2018. However, the only two sites to show an increase in abundance over the final year of study (2017 to 2018) are Isla Vista and Naples, both of these sites are located in Marine Protected Areas. The three sites that are not in Marine Protected Areas show a decrease in total lobster abundance over the final year of the survey. It appears from the trends in Figure 1 that designated Marine Protected Areas help improve lobster abundance in those areas.
+In general, the total lobster abundances at each of the 5 survey sites have increased from 2012 to 2018. However, the only two sites to show an increase in abundance over the final year of study (2017 to 2018) are Isla Vista and Naples, both of these sites are located in MPAs. The three sites that are not in MPAs show a decrease in total lobster abundance over the final year of the survey. It appears from the trends in Figure 1 that designated MPAs help improve lobster abundance in those areas.
 
 #### b. Results B - Lobster Size Distribution
 
@@ -108,7 +108,7 @@ ggplot(lobster_size, aes(y = Year, x = size_mm, fill = Year, color = Year)) +
 
 The density plots in Figure 2 show the distribution of lobster sizes (mm) at each site in 2012 and 2018. The two MPA sites, Isla Vista and Naples, show a positive shift in lobster size distribution in 2018 compared to 2012. However, the non-MPA sites, Arroyo Quemado, Mohawk and Carpinteria, show little to no shifts in lobster size distribution. Based on trends shown in Figure 2, lobster populations are able to grow larger at MPA sites which may indicate they are healthier and living longer due to reduced fishing and a flourishing habitat.
 
-#### c. Results C - Compare Mean Lobster Sizes
+#### c. Results C - Mean Lobster Size Comparisons
 
 ```{r}
 lobster_compare <- lobster_size %>% 
@@ -126,7 +126,7 @@ lobster_summary <- lobster_compare %>%
 ##### ADD CAPTION ABOVE TABLE
 lobster_summary %>% 
   kable(digits = 2,
-        caption = "Table 1. Comparing summary statistics (mean, standard deviation, and number of counts) of California spiny lobster size distributions at MPA vs. non-MPA sites in 2012 and 2018",
+        caption = "Table 1. Summary statistics (mean, standard deviation, and number of counts) of California spiny lobster size distributions at MPA vs. non-MPA sites in 2012 and 2018",
         col.names = c("Year",
                       "MPA or Non-MPA",
                       "Mean Size (mm)",
@@ -180,75 +180,27 @@ lobster_nonmpa_ttest <- t.test(lobster2012nonmpa, lobster2018nonmpa)
 lobster_nonmpa_d <- cohen.d(lobster2012nonmpa, lobster2018nonmpa)
 
 ```
-##### Results C notes (DELETE LATER)
-MPA vs. Non-MPA in 2012: 
+Comparing the results for mean lobster sizes at MPA and non-MPA sites in 2012 and 2018 provides insight into the recovery of kelp forest ecosystems in the Santa Barbara Channel. The results of the statistical summary of lobster size samples are listed in Table 1. The most striking result is that the mean lobster size in MPA sites increased from `r round(lobster_mpa_ttest$estimate[1], 2)` mm (n = 32) to `r round(lobster_mpa_ttest$estimate[2], 2)` mm (n = 1244), an increase of 10.19 mm. These means were found to be significantly different (t = `r round(lobster_mpa_ttest$statistic, 2)`, p < 0.0001) with a large effect size (Cohen's d = `r round(lobster_mpa_d$estimate[1], 2)`). The result is a significant increase in mean lobster size from 2012 to 2018, which suggests that MPA designation is contributing to improved lobster health and longevity.
 
-- Diff. in means = (74.92 - 67.38) = 7.54
-- Non-MPA > MPA
-- t = -3.2516, p-value = 0.002263
-- Cohen's d = -0.6098605 (medium)
-
-MPA vs. Non-MPA in 2018:
-
-- Diff. in means = (77.57 - 73.62) = 3.95
-- MPA > Non-MPA
-- t = 7.3071, p-value = 4.876e-13
-- Cohen's d = 0.3514986 (small)
-
-MPA in 2012 vs. MPA in 2018:
-
-- Diff. in means = (77.57 - 67.38) = 10.19. 
-- Increase in mean size from 2012 to 2018
-- t = -4.6879, p-value = 4.76e-05
-- Cohen's d = -0.8700026 (large)
-
-Non-MPA in 2012 vs. Non-MPA in 2018:
-
-- Diff. in means = (74.92 - 73.62) = 1.30
-- Small decrease in mean size from 2012 to 2018
-- t = 1.3343, p-value = 0.1831
-- Cohen's d = 0.1213778 (negligible)
-
-Comparing the results for mean lobster sizes at MPA and non-MPA sites in 2012 and 2018 provides insight into the recovery of kelp forest ecosystems in the Santa Barbara Channel. The results of the statistical summary of lobster size samples are listed in Table 1. The most striking result is that the mean lobster size in MPA sites increased from `r round(lobster_mpa_ttest$estimate[1], 2)` mm to `r round(lobster_mpa_ttest$estimate[2], 2)` mm, an increase of 10.19 mm. These means were found to be significantly different (t = `r round(lobster_mpa_ttest$statistic, 2)`, p < 0.0001) with a large effect size (Cohen's d = `r round(lobster_mpa_d$estimate[1], 2)`). The result is a significant increase in mean lobster size from 2012 to 2018, which suggests that MPA designation is contributing to improved lobster health and longevity.
-
-In constrast, the samples collected in non-MPA sites in 2012 and 2018 did not show a significant difference in mean lobster size (t = `r round(lobster_nonmpa_ttest$statistic, 2)`, p = `r round(lobster_nonmpa_ttest$p.value, 2)`). The sample means actually decreased slightly from `r round(lobster_nonmpa_ttest$estimate[1], 2)` mm to `r round(lobster_nonmpa_ttest$estimate[2], 2)` mm.
-
-The difference in mean between Non-MPA sites in 2012 and Non-MPA sites in 2018 is 1.30 mm with a negligible effect size (Cohen’s d = 0.1213778) [in line referencing here]. A statistical significance (t = 1.3343, p-value = 0.1831, n = 199 for 2012, n = 561 for 2018) [in line referencing].  The effect size indicates that there is a negligible difference between the means for 2012 and 2018. The small p-value size indicates that there is a high chance that these means could have been calculated by random chance. Although there was a slight increase in differences between mean lobster sizes for 2012 and 2018, this may have occurred by random chance.
+In constrast, the samples collected in non-MPA sites in 2012 and 2018 did not show a significant difference in mean lobster size (t = `r round(lobster_nonmpa_ttest$statistic, 2)`, p = `r round(lobster_nonmpa_ttest$p.value, 2)`). The sample means actually decreased slightly from `r round(lobster_nonmpa_ttest$estimate[1], 2)` mm (n = 199) to `r round(lobster_nonmpa_ttest$estimate[2], 2)` mm (n = 561). The effect size (Cohen's d = `r round(lobster_nonmpa_d$estimate[1], 2)`) was negligible, meaning that the sample means in 2012 and 2018 are very close to each other. The result is a lack of significant difference in mean lobster sizes in non-MPA sites between 2012 and 2018.
 
 
-##### Results C write-up
+Looking just at the 2012 samples, Table 1 shows that the mean lobster sizes were smaller in MPA sites (`r round(lobster2012_ttest$estimate[1], 2)` mm, n = 32) than non-MPA sites (`r round(lobster2012_ttest$estimate[2], 2)` mm, n = 199). Although the difference cannot be considered significant (t = `r round(lobster2012_ttest$statistic, 2)`, p = `r round(lobster2012_ttest$p.value, 4)`), a medium effect size (Cohen's d = `r round(lobster2012_d$estimate[1], 2)`) suggests that there is somewhat of a difference in means. 
 
-MPA sites are typically chosen at spots that have the best chance of restoring the bounty of ocean life. The abundance in these areas may have attracted many fishermen to fish in that area causing lobster abundance and size to be very low in these areas.
+However, when comparing MPA sites to non-MPA sites in 2018, there is almost no difference in mean lobster sizes. In fact, MPA sites (`r round(lobster2018_ttest$estimate[1], 2)` mm, n = 1244) have a mean that is 3.95 mm larger than non-MPA sites (`r round(lobster2018_ttest$estimate[2], 2)` mm, n = 561). Statistical analysis shows no signifnicant difference (t = `r round(lobster2018_ttest$statistic, 2)`, p < 0.0001) between the two samples and a small effect size (Cohen's d = `r round(lobster2018_d$estimate[1], 2)`). These results suggest that mean lobster sizes in MPA sites have recovered from 2012 to 2018 to the point of surpassing non-MPA sites. 
 
-**MPA vs. Non-MPA in 2012**
+### 4. Summary
+The results from the data analysis on California spiny lobsters in the Santa Barbara Channel suggest the following conclusions:
 
-The differences between mean lobster sizes between MPA vs. Non-MPA sites in 2012 is larger with Non-MPA sites having larger mean lobster sizes and a medium effect size. A relatively large p-value of 0.002263 was also calculated. This could potentially mean that MPA sites were fished heavily compared to Non-MPA before it became a designated protected area.
+- Between 2012 and 2018, spiny lobster abundances have increased more at MPA sites than at non-MPA sites, as seen in Figure 1.
+- The distributions of lobster sizes shown in Figure 2 have shifted positively (increased in size) from 2012 to 2018 only at the two MPA sites, whereas the non-MPA sites did not show any differences in size distribution between 2012 and 2018 samples.
+- As seen in Table 1, there was a significant increase in mean lobster sizes at MPA sites from 2012 to 2018. No significant difference in mean lobster sizes could be determined at non-MPA sites from 2012 to 2018. MPA sites have gone from having smaller mean lobster sizes than non-MPA sites in 2012, to slightly larger mean lobster sizes than non-MPA sites in 2018.
+- The results from this statistical analysis provide evidence that MPA designations have been effective in improving California spiny lobster health and abundance in the Santa Barbara Channel, which may suggest an improvement in kelp forest ecosystem health as well.
 
-**MPA vs. Non-MPA in 2018**
+### 5. References
 
-Null hypothesis: There is no difference in the mean lobster size for MPA vs. Non-MPA sites for 2018.
-Alternative hypothesis: There is a difference in mean lobster size for MPA vs. Non-MPA sites for 2018.
-The difference in means between MPA vs. Non-MPA during 2018 is 3.95 with a small effect size.  A small p-value of 4.876 x10^-13 was also calculated. This means that the probability of the null hypothesis being true is very small.
+[1] Reed D. 2019. *SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (Panulirus interruptus), ongoing since 2012.* Environmental Data Initiative. https://doi.org/10.6073/pasta/a593a675d644fdefb736750b291579a0
 
-**MPA in 2012 vs. MPA in 2018**
+[2] “California Spiny Lobster.” National Parks Service, U.S. Department of the Interior, 13 July 2016. https://www.nps.gov/chis/learn/nature/california-spiny-lobster.htm 
 
-Null hypothesis: There is no difference between the mean lobster size of MPA sites for 2012 and MPA sites in 2018.
-Alternative hypothesis: There is a difference between mean lobster sizes for MPA sites for 2012 and MPA sites in 2018.
-The difference in means between MPA sites in 2012 and MPA sites in 2018 is larger with a large effect size. A small p-value 4.76 x10^-5 was also calculated. This means that the probability of the null hypothesis being true is very small.
-
-**Non-MPA in 2012 vs. Non-MPA in 2018**
-
-Null hypothesis: There is no difference between mean lobster size of Non-MPA sites for 2012 and Non-MPA sites in 2018.
-Alternative hypothesis: There is a difference between mean lobster size of Non-MPA sites for 2012 and Non-MPA sites in 2018.
-
-
-
-
-
-### 4. References
-
-SBC LTER (2019). https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-sbc.77.3
-
-National Park Service (2016). https://www.nps.gov/chis/learn/nature/california-spiny-lobster.htm
-
-Santa Barbara Channelkeeper (no date). https://www.sbck.org/current-issues/marine-conservation/marine-protected-areas/learn-about-mpas/
+[3] “Learn about MPAs: Santa Barbara Channelkeeper: Keeping Watch for Clean Water.” Santa Barbara Channelkeeper. https://www.sbck.org/current-issues/marine-conservation/marine-protected-areas/learn-about-mpas/
