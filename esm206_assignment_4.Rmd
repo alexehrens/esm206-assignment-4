@@ -35,11 +35,11 @@ lobster_abundance$site[lobster_abundance$site == "MOHK"] <- "Mohawk"
 
 ### 1. Introduction
 
-The California spiny lobster (Panulirus interruptus) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests. These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems. This report explores the relationship between the size and abundance distribution of the California spiny lobster at five locations along the Santa Barbara channel. Of the five sites, two are designated marine protected areas (MPAs), which restrict human activity —including fishing. Many MPAs have shown positive trends of recovery in habitats across the world. This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem.
+The California spiny lobster (Panulirus interruptus) is an important species along the Southern California coast and plays a key role in maintaining diversity in kelp forests. These lobsters are a common target for fishermen, which greatly affects their size and abundance in the kelp forest ecosystems. This report explores the relationship between the size and abundance distribution of the California spiny lobster at five locations along the Santa Barbara channel. Of the five sites, two are designated as marine protected areas (MPAs) by the California Department of Fish and Game, which restrict human activity — including fishing. Many MPAs have shown positive trends of recovery in habitats across the world. This report hopes to answer the question of whether MPAs affect the California spiny lobster size and abundance along the Santa Barbara coast. This will help assess the recovery of the kelp forest ecosystem.
 
 ### 2. Data and Methods
 
-The two variables being analyzed in this report are lobster size (mm) and lobster abundance at five sites along the Santa Barbara channel between years 2012-2018. Welch’s two sample t-test was used to compare lobster size at MPA and non-MPA sites for 2012 and 2018. The following scenarios were compared:
+The two variables being analyzed in this report are lobster size (mm) and lobster abundance at five sites along the Santa Barbara channel between years 2012-2018. Data on abundance and size were collected by annually by divers just before the start of the fishing season in late summer (SBC LTER, 2019). Welch’s two sample t-test was used to compare lobster size at MPA and non-MPA sites for 2012 and 2018. The following scenarios were compared:
 
 - 2012 MPA vs.2012 Non-MPA
 - 2018 MPA vs. 2018 Non-MPA
@@ -50,28 +50,23 @@ A 95% significance level was used. Rstudio Version 1.2.1335 was used to analyze 
 
 ### 3. Results
 
-#### a. Results A
-IVEE and NAPL - MPA
-
-AQUE, CARP and MOHK - Non-MPA
-
-- Need to change color and show between MPA and NonMPA sites
+#### a. Results A - Lobster Abundance
 
 ```{r}
 lobster_count <- lobster_abundance %>% 
   group_by(year, site) %>% 
   summarize(total_counts = sum(count)) %>% 
-  mutate(category = ifelse(site %in% c("Isla Vista", "Naples"), "MPA", "Non-MPA")) %>% 
+  mutate(Category = ifelse(site %in% c("Isla Vista", "Naples"), "MPA", "Non-MPA")) %>% 
   mutate(Site = site)
   
 ggplot(lobster_count, aes(x = year, y = total_counts)) +
-  geom_line(aes(color = Site)) +
+  geom_line(aes(color = Site, linetype = Category)) +
   theme_bw() +
   theme(legend.position = "right",
         legend.key.height = unit(6, "mm"),
         legend.key.width = unit(4, "mm"),
-        plot.caption = element_text(hjust = 0,
-                                    face = "bold")) +
+        plot.caption = element_text(hjust = 0),
+        plot.subtitle = element_text(size = 8)) +
   scale_x_continuous(limits = c(2012, 2018),
                      expand = c(0,0)) +
   scale_y_continuous(limits = c(0, 1000),
@@ -80,14 +75,15 @@ ggplot(lobster_count, aes(x = year, y = total_counts)) +
        y = "Total lobster counts",
        title = "Spiny lobster abundance in the Santa Barbara Channel (2012-2018)",
        subtitle = "Source: SBC LTER",
-       caption = "Figure 1. Counts of California spiny lobster at 5 sites in the Santa Barbara Channel between 2012 and 2018.")
+       caption = "Figure 1. Counts of California spiny lobster at 5 sites in the Santa Barbara Channel between 2012 and 2018. Solid 
+lines indicate the sites that are in MPAs (Isla Vista and Naples), and dashed lines are sites that are not in MPAs 
+(Arroyo Quemado, Carpinteria, and Mohawk).")
 
-# update/format caption, add more beautification stuff
 ```
 
 In general, the total lobster abundance at each of the 5 survey sites have increased from 2012 to 2018. However, the only two sites to show an increase in abundance over the final year of study (2017 to 2018) are Isla Vista and Naples, both of these sites are located in Marine Protected Areas. The three sites that are not in Marine Protected Areas show a decrease in total lobster abundance over the final year of the survey. It appears from the trends in Figure 1 that designated Marine Protected Areas help improve lobster abundance in those areas.
 
-#### b. Results B
+#### b. Results B - Lobster Size Distribution
 
 ```{r}
 lobster_size <- lobster_abundance %>% 
@@ -96,25 +92,28 @@ lobster_size <- lobster_abundance %>%
   mutate(Year = as.character(year))
 
 ggplot(lobster_size, aes(y = Year, x = size_mm, fill = Year, color = Year)) +
-  geom_density_ridges(color = "gray40") +
+  geom_density_ridges(color = "gray40",
+                      alpha = 0.7) +
   facet_wrap(~site) +
   theme_bw() +
   scale_y_discrete(expand = c(0,0)) +
   theme(legend.position = c(0.84, 0.25),
-        plot.caption = element_text(hjust = 0, face = "bold")) +
+        plot.caption = element_text(hjust = 0),
+        plot.subtitle = element_text(size = 8)) +
   labs(y = "Year",
        x = "Lobster Size (mm)",
        title = "Lobster size distribution at survey sites in 2012 and 2018",
        subtitle = "Source: SBC LTER",
-       caption = "Figure 2. Size distributions of California spiny lobsters at 5 survey sites in the Santa Barbara Channel, collected in 2012 and 2018.")
-  
-# update/format caption, title
+       caption = "Figure 2. Size distributions of California spiny lobsters at 5 survey sites in the Santa Barbara Channel, collected in 
+2012 and 2018. Lobster sizes (in mm) were measured at Arroyo Quemado (n = 38 in 2012, n = 54 in 2018), 
+Carpinteria (n = 78 in 2012, n = 343 in 2018), Isla Vista (n = 26 in 2012, n = 946 in 2018), Mohawk (n = 83 in 2012, 
+n = 164 in 2018), and Naples (n = 6 in 2012, n = 298 in 2018). Isla Vista and Naples are in MPAs, the rest are not.")
   
 ```
 
-The density plots above show each sites distribution of lobster sizes (mm) in 2012 and 2018. The two MPA sites, Isla Vista and Naples, show a positive shift in lobster size distribution in 2018 compared to 2012. However, the non-MPA sites, Arroyo Quemado, Mohawk and Carpinteria, show little to no shifts in lobster size distribution. Based on these graphs, the lobster populations are able to grow larger which may indicate they are healthier and living longer due to reduced fishing and a flourishing habitat.
+The density plots above show the distribution of lobster sizes (mm) at each site in 2012 and 2018. The two MPA sites, Isla Vista and Naples, show a positive shift in lobster size distribution in 2018 compared to 2012. However, the non-MPA sites, Arroyo Quemado, Mohawk and Carpinteria, show little to no shifts in lobster size distribution. Based on these graphs, the lobster populations are able to grow larger which may indicate they are healthier and living longer due to reduced fishing and a flourishing habitat.
 
-#### c. Results C
+#### c. Results C - Compare Mean Lobster Sizes
 
 ```{r}
 lobster_compare <- lobster_size %>% 
@@ -132,17 +131,17 @@ lobster_summary <- lobster_compare %>%
 ##### ADD CAPTION ABOVE TABLE
 lobster_summary %>% 
   kable(digits = 2,
+        caption = "Table 1. Comparing summary statistics of California spiny lobster size distributions at MPA vs. non-MPA sites in 2012 and 2018",
         col.names = c("Year",
                       "MPA or Non-MPA",
                       "Mean Size (mm)",
                       "Standard Deviation (mm)",
                       "Count")) %>% 
   kable_styling(bootstrap_options = "bordered",
-                full_width = TRUE,
+                full_width = FALSE,
                 position = "left")
 
 #### start performing two-sample t-tests for 2012 MPA vs. non-MPA, 2018 MPA vs. non-MPA, 2012 MPA vs 2018 MPA, 2012 non-MPA vs 2018 non-MPA
-# Lobster sizes for MPA vs. non-MPA sites in 2012
 
 # Create vectors 
 lobster2012mpa <- lobster_compare %>% 
@@ -167,27 +166,23 @@ lobster2018nonmpa <- lobster_compare %>%
 
 # t-test and cohen's d comparing mpa and non-mpa sites in 2012
 lobster2012_ttest <- t.test(lobster2012mpa, lobster2012nonmpa)
-lobster2012_ttest
+
 lobster2012_d <- cohen.d(lobster2012mpa, lobster2012nonmpa)
-lobster2012_d
 
 # t-test and cohen's d comparing mpa and non-mpa sites in 2018
 lobster2018_ttest <- t.test(lobster2018mpa, lobster2018nonmpa)
-lobster2018_ttest
+
 lobster2018_d <- cohen.d(lobster2018mpa, lobster2018nonmpa)
-lobster2018_d
 
 # t-test comparing mpa sites in 2012 and 2018
 lobster_mpa_ttest <- t.test(lobster2012mpa, lobster2018mpa)
-lobster_mpa_ttest
+
 lobster_mpa_d <- cohen.d(lobster2012mpa, lobster2018mpa)
-lobster_mpa_d
 
 # t-test comparing non-mpa sites in 2012 and 2018
 lobster_nonmpa_ttest <- t.test(lobster2012nonmpa, lobster2018nonmpa)
-lobster_nonmpa_ttest
+
 lobster_nonmpa_d <- cohen.d(lobster2012nonmpa, lobster2018nonmpa)
-lobster_nonmpa_d
 
 ```
 ##### Results C notes (DELETE LATER)
